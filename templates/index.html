@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Analisis sentimen komentar pemain Magic Chess GoGo menggunakan SVM dan TF-IDF.">
+    <title>Magic Chess GoGo | Sentiment Analysis</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-glow page-glow-one"></div>
+    <div class="page-glow page-glow-two"></div>
+
+    <header class="navbar">
+        <a class="brand" href="/" aria-label="Magic Chess GoGo Sentiment Analysis">
+            <span class="brand-mark" aria-hidden="true">M</span>
+            <span class="brand-copy">
+                <strong>Magic Chess <em>GoGo</em></strong>
+                <small>Sentiment Analysis</small>
+            </span>
+        </a>
+
+        <nav class="nav-links" aria-label="Navigasi utama">
+            <a href="#analisis">Analisis</a>
+            <a href="#tentang">Tentang</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero" id="analisis">
+            <div class="hero-copy">
+                <div class="model-badge">
+                    <span class="badge-dot"></span>
+                    SVM + TF-IDF
+                </div>
+
+                <h1>
+                    Magic Chess GoGo
+                    <span>Sentiment Analysis</span>
+                </h1>
+
+                <p class="hero-description">
+                    Analisis komentar atau ulasan pemain untuk mengenali sentimen
+                    <strong>positif</strong>, <strong>netral</strong>, atau <strong>negatif</strong>
+                    dengan model Support Vector Machine.
+                </p>
+
+                <section class="analyzer-card" aria-labelledby="form-title">
+                    <div class="card-heading">
+                        <div>
+                            <span class="section-kicker">PLAYER REVIEW</span>
+                            <h2 id="form-title">Masukkan komentar</h2>
+                        </div>
+                        <span class="status-pill">Model siap</span>
+                    </div>
+
+                    <form method="POST" action="/#hasil">
+                        <label class="sr-only" for="komentar">Komentar pemain</label>
+                        <textarea
+                            id="komentar"
+                            name="komentar"
+                            maxlength="1000"
+                            placeholder="Contoh: Gamenya lumayan seru, tapi matchmaking masih perlu diperbaiki..."
+                            required>{{ komentar }}</textarea>
+
+                        <div class="form-footer">
+                            <span class="form-note">Maks. 1.000 karakter</span>
+                            <button type="submit">
+                                Analisis Sentimen
+                                <span aria-hidden="true">→</span>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <div class="example-row" aria-label="Contoh sentimen">
+                    <span>Contoh:</span>
+                    <span class="example-chip">“Game ini keren banget!”</span>
+                    <span class="example-chip">“Lumayan, masih ada bug.”</span>
+                </div>
+            </div>
+
+            <div class="dashboard-wrap" aria-label="Panel sentimen">
+                <div class="dashboard-orbit orbit-one"></div>
+                <div class="dashboard-orbit orbit-two"></div>
+
+                <section class="dashboard-card">
+                    <div class="dashboard-header">
+                        <div>
+                            <span class="section-kicker">3 KELAS SENTIMEN</span>
+                            <h2>Analisis Sentimen</h2>
+                        </div>
+                        <span class="live-indicator"><i></i> Ready</span>
+                    </div>
+
+                    <div class="sentiment-grid">
+                        <article class="sentiment-item positive-item {% if result and result.class == 'positive' %}is-active{% endif %}">
+                            <span class="sentiment-icon">+</span>
+                            <strong>Positif</strong>
+                            <small>Apresiasi & kepuasan</small>
+                        </article>
+
+                        <article class="sentiment-item neutral-item {% if result and result.class == 'neutral' %}is-active{% endif %}">
+                            <span class="sentiment-icon">=</span>
+                            <strong>Netral</strong>
+                            <small>Informasi & opini seimbang</small>
+                        </article>
+
+                        <article class="sentiment-item negative-item {% if result and result.class == 'negative' %}is-active{% endif %}">
+                            <span class="sentiment-icon">−</span>
+                            <strong>Negatif</strong>
+                            <small>Keluhan & kritik</small>
+                        </article>
+                    </div>
+
+                    <section class="result-shell {% if result %}has-result{% endif %}" id="hasil">
+                        {% if result %}
+                            <div class="result-card {{ result.class }}">
+                                <div class="result-symbol">{{ result.icon }}</div>
+                                <div class="result-content">
+                                    <span>Sentimen terdeteksi</span>
+                                    <h3>{{ result.label }}</h3>
+                                    <p>{{ result.desc }}</p>
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="empty-result">
+                                <span class="empty-icon">↗</span>
+                                <div>
+                                    <strong>Siap menganalisis</strong>
+                                    <p>Masukkan komentar pemain untuk melihat hasil klasifikasi.</p>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </section>
+
+                    <div class="mini-metrics">
+                        <div>
+                            <span>Model</span>
+                            <strong>SVM</strong>
+                        </div>
+                        <div>
+                            <span>Ekstraksi</span>
+                            <strong>TF-IDF</strong>
+                        </div>
+                        <div>
+                            <span>Output</span>
+                            <strong>3 Kelas</strong>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </section>
+
+        <section class="feature-strip" id="tentang">
+            <article>
+                <span class="feature-number">01</span>
+                <div>
+                    <strong>Analisis Sentimen</strong>
+                    <p>Analisis komentar pemain Magic Chess GoGo secara langsung.</p>
+                </div>
+            </article>
+            <article>
+                <span class="feature-number">02</span>
+                <div>
+                    <strong>Tiga Kategori</strong>
+                    <p>Hasil diklasifikasikan menjadi positif, netral, atau negatif.</p>
+                </div>
+            </article>
+            <article>
+                <span class="feature-number">03</span>
+                <div>
+                    <strong>Berbasis SVM</strong>
+                    <p>Klasifikasi menggunakan model Support Vector Machine dan TF-IDF.</p>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <footer>
+        <span>Magic Chess GoGo Sentiment Analysis</span>
+        <span>Dibuat oleh <strong>Ammar Wa'azi Rohid</strong></span>
+    </footer>
+</body>
+</html>
